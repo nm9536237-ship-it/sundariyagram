@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="hi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SundariyaGram • सुंदरियाग्राम</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Grand+Hotel&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        logo: ['Grand Hotel', 'cursive'],
+                        display: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        insta: {
+                            pink: '#E1306C',
+                            purple: '#833AB4',
+                            orange: '#F77737',
+                            yellow: '#FCAF45',
+                            dark: '#000000',
+                            card: '#0A0A0C',
+                            border: '#262626'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .story-ring {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            padding: 2.5px;
+        }
+
+        @keyframes heartBurst {
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            35% { transform: scale(1.3) rotate(5deg); opacity: 1; }
+            70% { transform: scale(0.95) rotate(0deg); opacity: 1; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+        .animate-heart-burst {
+            animation: heartBurst 0.75s cubic-bezier(0.17, 0.89, 0.32, 1.49) forwards;
+        }
+
+        .reels-container {
+            scroll-snap-type: y mandatory;
+        }
+        .reel-slide {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-insta-dark text-zinc-900 dark:text-zinc-100 antialiased selection:bg-pink-500 selection:text-white overflow-x-hidden transition-colors duration-200">
+
+    <!-- NOTIFICATION TOAST CONTAINER -->
+    <div id="toast-container" class="fixed top-16 right-4 z-[100] flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- MAIN APP LAYOUT -->
+    <div class="min-h-screen flex flex-col md:flex-row max-w-[1440px] mx-auto relative">
+
+        <!-- LEFT SIDEBAR NAVIGATION (Desktop & Tablet) -->
+        <aside class="hidden md:flex flex-col w-64 lg:w-72 border-r border-zinc-200 dark:border-insta-border bg-white/95 dark:bg-insta-dark/95 backdrop-blur-md fixed h-screen z-40 px-4 py-6 justify-between select-none">
+            <div>
+                <!-- Brand Header (Tap 5 times rapidly for Hidden Owner Ad Server Console) -->
+                <div class="flex items-center justify-between px-3 mb-8 cursor-pointer group" onclick="handleLogoSecretTap()">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl story-ring flex items-center justify-center shadow-md group-active:scale-95 transition">
+                            <div class="bg-white dark:bg-zinc-950 w-full h-full rounded-[10px] flex items-center justify-center">
+                                <i data-lucide="instagram" class="w-5 h-5 text-pink-500"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h1 class="font-logo text-3xl tracking-wide bg-gradient-to-r from-pink-500 via-purple-500 to-orange-400 bg-clip-text text-transparent leading-none">SundariyaGram</h1>
+                            <span class="text-[10px] font-medium tracking-wider text-zinc-400 block mt-0.5">सुंदरियाग्राम • Social</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clean Public Navigation Links (Zero Money/Wallet Icons) -->
+                <nav class="space-y-1.5" id="desktop-nav">
+                    <button onclick="switchTab('home')" data-tab="home" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-semibold transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900 text-pink-500 bg-pink-500/10">
+                        <i data-lucide="home" class="w-6 h-6"></i>
+                        <span class="text-sm lg:text-base">Home • होम</span>
+                    </button>
+
+                    <button onclick="switchTab('explore')" data-tab="explore" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
+                        <i data-lucide="compass" class="w-6 h-6"></i>
+                        <span class="text-sm lg:text-base">Explore • खोजें</span>
+                    </button>
+
+                    <button onclick="switchTab('reels')" data-tab="reels" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
+                        <i data-lucide="clapperboard" class="w-6 h-6"></i>
+                        <div class="flex items-center justify-between flex-1">
+                            <span class="text-sm lg:text-base">Reels • रील्स</span>
+                            <span id="nav-reels-count" class="text-[10px] bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-2 py-0.5 rounded-full font-bold">0</span>
+                        </div>
+                    </button>
+
+                    <button onclick="openUploadModal('file')" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
+                        <i data-lucide="plus-square" class="w-6 h-6"></i>
+                        <span class="text-sm lg:text-base">Create • पोस्ट बनाएं</span>
+                    </button>
+
+                    <button onclick="openUploadModal('camera')" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
+                        <i data-lucide="camera" class="w-6 h-6 text-rose-500"></i>
+                        <span class="text-sm lg:text-base">Live Camera • कैमरा</span>
+                    </button>
+
+                    <button onclick="switchTab('profile')" data-tab="profile" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
+                        <div id="sidebar-profile-avatar" class="w-6 h-6 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold overflow-hidden ring-2 ring-pink-500/50">
+                            U
+                        </div>
+                        <span class="text-sm lg:text-base truncate" id="sidebar-profile-name">Profile • प्रोफ़ाइल</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Bottom Theme & Cloud Sync Indicator -->
+            <div class="space-y-3 pt-4 border-t border-zinc-200 dark:border-insta-border">
+                <div class="flex items-center justify-between px-2">
+                    <button onclick="toggleTheme()" class="flex items-center gap-2 text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white py-2 px-3 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition">
+                        <i data-lucide="sun-moon" class="w-4 h-4"></i>
+                        <span>Dark / Light</span>
+                    </button>
+                    <span id="storage-status-badge" class="text-[10px] font-medium text-zinc-400 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Synced
+                    </span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MOBILE TOP HEADER -->
+        <header class="md:hidden sticky top-0 z-40 bg-white/95 dark:bg-insta-dark/95 backdrop-blur-md border-b border-zinc-200 dark:border-insta-border px-4 py-2.5 flex items-center justify-between select-none">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="handleLogoSecretTap()">
+                <div class="w-8 h-8 rounded-lg story-ring flex items-center justify-center">
+                    <div class="bg-white dark:bg-zinc-950 w-full h-full rounded-[6px] flex items-center justify-center">
+                        <i data-lucide="instagram" class="w-4 h-4 text-pink-500"></i>
+                    </div>
+                </div>
+                <span class="font-logo text-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-orange-400 bg-clip-text text-transparent">SundariyaGram</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button onclick="openUploadModal('camera')" class="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 text-rose-500" title="Live Camera">
+                    <i data-lucide="camera" class="w-5 h-5"></i>
+                </button>
+                <button onclick="switchTab('explore')" class="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </button>
+                <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900">
+                    <i data-lucide="sun-moon" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 md:ml-64 lg:ml-72 pb-20 md:pb-12 min-h-screen">
+
+            <!-- ==========================================
+                 TAB 1: AUTHENTIC HOME FEED
+            =========================================== -->
+            <section id="tab-home" class="tab-view max-w-5xl mx-auto pt-3 md:pt-6 px-0 sm:px-4 flex flex-col lg:flex-row gap-8 justify-center">
+                
+                <!-- Center Feed Column -->
+                <div class="w-full max-w-[470px] mx-auto space-y-4">
+                    
+                    <!-- Stories Tray -->
+                    <div id="stories-wrapper" class="bg-white dark:bg-insta-card border-b sm:border border-zinc-200 dark:border-insta-border sm:rounded-2xl p-3.5 overflow-x-auto no-scrollbar">
+                        <div class="flex items-center gap-4" id="stories-container">
+                            <!-- Populated dynamically -->
+                        </div>
+                        <input type="file" id="hidden-story-input" accept="image/*,video/*" class="hidden" onchange="handleRealStoryUpload(event)">
+                    </div>
+
+                    <!-- Quick Create Post Bar -->
+                    <div class="px-3 sm:px-0">
+                        <div class="bg-white dark:bg-insta-card border border-zinc-200 dark:border-insta-border rounded-2xl p-3 flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('profile')">
+                                <div id="feed-top-avatar" class="w-9 h-9 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs overflow-hidden shrink-0">
+                                    U
+                                </div>
+                                <div>
+                                    <span id="feed-top-name" class="font-semibold text-xs sm:text-sm block leading-tight">अपना प्रोफ़ाइल सेट करें</span>
+                                    <span class="text-[11px] text-zinc-400">यहाँ से असली वीडियो और फोटो शेयर करें</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="openUploadModal('file')" class="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-xs font-semibold flex items-center gap-1.5 transition">
+                                    <i data-lucide="image-plus" class="w-4 h-4 text-pink-500"></i>
+                                    <span>गैलरी</span>
+                                </button>
+                                <button onclick="openUploadModal('camera')" class="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-xs font-semibold flex items-center gap-1.5 transition">
+                                    <i data-lucide="video" class="w-4 h-4 text-purple-500"></i>
+                                    <span>कैमरा</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Feed Posts + Native Sponsored Ad Slots -->
+                    <div id="feed-posts-container" class="space-y-5 pb-6">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Right Desktop Sidebar (Authentic User Card & Quick Links) -->
+                <div class="hidden lg:block w-80 shrink-0 pt-2 space-y-6">
+                    <!-- Current User Profile Card -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('profile')">
+                            <div id="right-card-avatar" class="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold text-base overflow-hidden">
+                                U
+                            </div>
+                            <div>
+                                <div id="right-card-username" class="font-bold text-sm">your_handle</div>
+                                <div id="right-card-fullname" class="text-xs text-zinc-500 dark:text-zinc-400">Your Name</div>
+                            </div>
+                        </div>
+                        <button onclick="openProfileSetupModal()" class="text-xs font-bold text-sky-500 hover:text-sky-400">Edit</button>
+                    </div>
+
+                    <!-- Platform Features Box -->
+                    <div class="p-4 rounded-2xl bg-zinc-50 dark:bg-insta-card border border-zinc-200 dark:border-insta-border space-y-3">
+                        <div class="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Create & Share</div>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                            अपने फ़ोन या कंप्यूटर से असली HD वीडियो (.mp4, .webm) और फ़ोटो अपलोड करें या सीधे लाइव कैमरे से रील्स रिकॉर्ड करें।
+                        </p>
+                        <div class="grid grid-cols-2 gap-2 pt-1">
+                            <button onclick="openUploadModal('file')" class="py-2 px-3 rounded-xl bg-zinc-200/70 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                                <i data-lucide="upload" class="w-3.5 h-3.5 text-pink-500"></i> Upload File
+                            </button>
+                            <button onclick="openUploadModal('camera')" class="py-2 px-3 rounded-xl bg-zinc-200/70 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                                <i data-lucide="camera" class="w-3.5 h-3.5 text-purple-500"></i> Record Live
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Footer Legal Info -->
+                    <div class="text-[11px] text-zinc-400 space-y-2 leading-relaxed">
+                        <p>About • Help • Press • API • Jobs • Privacy • Terms • Locations</p>
+                        <p>© 2026 SUNDARIYAGRAM SOCIAL</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 TAB 2: EXPLORE & SEARCH TAB
+            =========================================== -->
+            <section id="tab-explore" class="tab-view hidden max-w-4xl mx-auto pt-4 px-3 sm:px-4 space-y-5">
+                <!-- Search Input Bar -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <div class="relative flex-1">
+                        <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                        <input 
+                            type="text" 
+                            id="explore-search-input" 
+                            oninput="renderExploreGrid()" 
+                            placeholder="कैप्शन, लोकेशन या हैशटैग (#) खोजें..." 
+                            class="w-full pl-11 pr-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-insta-border text-sm focus:outline-none focus:border-pink-500"
+                        >
+                    </div>
+                    <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                        <button onclick="setExploreFilter('all')" id="exp-filter-all" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 shrink-0">All Posts</button>
+                        <button onclick="setExploreFilter('video')" id="exp-filter-video" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 shrink-0">Videos / Reels</button>
+                        <button onclick="setExploreFilter('image')" id="exp-filter-image" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 shrink-0">Photos</button>
+                    </div>
+                </div>
+
+                <!-- Explore Media Grid -->
+                <div id="explore-grid-container" class="grid grid-cols-3 gap-1 sm:gap-3">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 TAB 3: VERTICAL REELS PLAYER
+            =========================================== -->
+            <section id="tab-reels" class="tab-view hidden h-[calc(100vh-115px)] md:h-[calc(100vh-32px)] flex items-center justify-center px-0 sm:px-4 pt-0 md:pt-4">
+                <div class="relative w-full max-w-[410px] h-full bg-black sm:rounded-3xl overflow-hidden shadow-2xl border border-zinc-800 flex flex-col">
+                    <!-- Top Overlay inside Reels -->
+                    <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
+                        <div class="flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full">
+                            <i data-lucide="clapperboard" class="w-4 h-4 text-white"></i>
+                            <span class="text-white font-bold text-xs sm:text-sm">Reels</span>
+                        </div>
+                        <button onclick="openUploadModal('camera')" class="pointer-events-auto bg-white/15 hover:bg-white/25 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="camera" class="w-3
