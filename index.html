@@ -1,300 +1,686 @@
 <!DOCTYPE html>
-<html lang="hi" class="dark">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SundariyaGram • सुंदरियाग्राम</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Grand+Hotel&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        logo: ['Grand Hotel', 'cursive'],
-                        display: ['Poppins', 'sans-serif'],
-                    },
-                    colors: {
-                        insta: {
-                            pink: '#E1306C',
-                            purple: '#833AB4',
-                            orange: '#F77737',
-                            yellow: '#FCAF45',
-                            dark: '#000000',
-                            card: '#0A0A0C',
-                            border: '#262626'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .story-ring {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            padding: 2.5px;
-        }
-
-        @keyframes heartBurst {
-            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
-            35% { transform: scale(1.3) rotate(5deg); opacity: 1; }
-            70% { transform: scale(0.95) rotate(0deg); opacity: 1; }
-            100% { transform: scale(1.4); opacity: 0; }
-        }
-        .animate-heart-burst {
-            animation: heartBurst 0.75s cubic-bezier(0.17, 0.89, 0.32, 1.49) forwards;
-        }
-
-        .reels-container {
-            scroll-snap-type: y mandatory;
-        }
-        .reel-slide {
-            scroll-snap-align: start;
-            scroll-snap-stop: always;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000000">
+<title>SundariyaGram • सुंदरियाग्राम</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+  body { background: #000; color: #fff; max-width: 480px; margin: 0 auto; min-height: 100vh; padding-bottom: 70px; overflow-x: hidden; border-left: 1px solid #222; border-right: 1px solid #222; }
+  header { position: sticky; top: 0; z-index: 50; background: rgba(0,0,0,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid #222; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-size: 22px; font-weight: 800; background: linear-gradient(45deg, #ff9933, #ff0055, #cc00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; user-select: none; }
+  .top-btns { display: flex; gap: 8px; align-items: center; }
+  .btn { background: #1f1f23; color: #fff; border: 1px solid #333; padding: 7px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+  .btn-primary { background: linear-gradient(45deg, #ff0055, #ff6600); border: none; color: #fff; }
+  .stories { display: flex; gap: 12px; padding: 12px 14px; overflow-x: auto; border-bottom: 1px solid #1a1a1a; }
+  .story-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
+  .story-ring { width: 64px; height: 64px; border-radius: 50%; padding: 2px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; position: relative; }
+  .story-ring img, .story-ring video { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #000; background: #111; }
+  .story-add { position: absolute; bottom: 0; right: 0; background: #0095f6; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border: 2px solid #000; }
+  .story-name { font-size: 11px; color: #ccc; max-width: 68px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .quick-upload { margin: 10px 12px; padding: 12px; background: #111; border: 1px solid #262626; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .post { border-bottom: 1px solid #1f1f1f; margin-bottom: 8px; background: #050505; }
+  .post-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; }
+  .post-user { display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(45deg,#ff0055,#ff9900); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; object-fit: cover; }
+  .post-media { width: 100%; max-height: 520px; background: #0a0a0a; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .post-media img, .post-media video { width: 100%; max-height: 520px; object-fit: contain; display: block; }
+  .post-actions { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px 6px; font-size: 22px; }
+  .action-left { display: flex; gap: 16px; align-items: center; }
+  .action-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .action-btn span { font-size: 13px; font-weight: 600; }
+  .post-caption { padding: 4px 14px 10px; font-size: 13px; line-height: 1.4; color: #eee; }
+  .comments-box { padding: 0 14px 10px; font-size: 12px; color: #bbb; }
+  .comment-input-row { display: flex; gap: 8px; padding: 8px 14px 12px; border-top: 1px solid #151515; }
+  .comment-input-row input { flex: 1; background: #141414; border: 1px solid #2a2a2a; color: #fff; padding: 8px 12px; border-radius: 18px; font-size: 12px; outline: none; }
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: rgba(10,10,10,0.96); border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; height: 58px; z-index: 60; }
+  .nav-btn { background: none; border: none; color: #888; font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; font-weight: 600; }
+  .nav-btn.active { color: #fff; }
+  .nav-btn .ico { font-size: 20px; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; }
+  .modal.open { display: flex; }
+  .modal-card { background: #141417; border: 1px solid #2d2d35; width: 100%; max-width: 420px; border-radius: 18px; padding: 18px; max-height: 90vh; overflow-y: auto; }
+  .input { width: 100%; background: #0c0c0e; border: 1px solid #2e2e36; color: #fff; padding: 10px 12px; border-radius: 10px; margin-top: 8px; margin-bottom: 12px; font-size: 13px; }
+  .reel-card { position: relative; height: calc(100vh - 120px); background: #000; border-bottom: 1px solid #222; display: flex; align-items: center; justify-content: center; }
+  .reel-card video { width: 100%; height: 100%; object-fit: cover; }
+  .reel-overlay { position: absolute; bottom: 16px; left: 14px; right: 65px; text-shadow: 0 1px 4px rgba(0,0,0,0.9); pointer-events: none; }
+  .reel-side { position: absolute; bottom: 20px; right: 12px; display: flex; flex-direction: column; gap: 18px; align-items: center; }
+  .badge-ad { background: #ffcc00; color: #000; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 3px; }
+  .grid-3-item { aspect-ratio: 1/1; background: #111; overflow: hidden; position: relative; cursor: pointer; }
+  .grid-3-item img, .grid-3-item video { width: 100%; height: 100%; object-fit: cover; }
+</style>
 </head>
-<body class="bg-white dark:bg-insta-dark text-zinc-900 dark:text-zinc-100 antialiased selection:bg-pink-500 selection:text-white overflow-x-hidden transition-colors duration-200">
+<body>
 
-    <!-- NOTIFICATION TOAST CONTAINER -->
-    <div id="toast-container" class="fixed top-16 right-4 z-[100] flex flex-col gap-2 pointer-events-none"></div>
+<!-- TOP HEADER -->
+<header>
+  <div class="logo" id="appLogo" onclick="handleLogoTap()">SundariyaGram</div>
+  <div class="top-btns">
+    <button class="btn btn-primary" onclick="openModal('installModal')">📲 ऐप डाउनलोड</button>
+    <button class="btn" onclick="openCameraModal()">📸 कैमरा</button>
+  </div>
+</header>
 
-    <!-- MAIN APP LAYOUT -->
-    <div class="min-h-screen flex flex-col md:flex-row max-w-[1440px] mx-auto relative">
+<!-- PAGE 1: HOME FEED -->
+<div id="page-home" class="page active">
+  <!-- STORIES BAR -->
+  <div class="stories" id="storiesBar"></div>
 
-        <!-- LEFT SIDEBAR NAVIGATION (Desktop & Tablet) -->
-        <aside class="hidden md:flex flex-col w-64 lg:w-72 border-r border-zinc-200 dark:border-insta-border bg-white/95 dark:bg-insta-dark/95 backdrop-blur-md fixed h-screen z-40 px-4 py-6 justify-between select-none">
+  <!-- QUICK UPLOAD BAR -->
+  <div class="quick-upload">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="avatar" id="miniAvatar">उ</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;" id="miniName">अपना वीडियो या फोटो डालें</div>
+        <div style="font-size:11px;color:#999;">गैलरी से चुनें या लाइव रिकॉर्ड करें</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <button class="btn btn-primary" onclick="triggerFileSelect('post')">+ गैलरी</button>
+    </div>
+  </div>
+
+  <!-- FEED CONTAINER -->
+  <div id="feedContainer"></div>
+</div>
+
+<!-- PAGE 2: EXPLORE / SEARCH -->
+<div id="page-explore" class="page">
+  <div style="padding:12px;">
+    <input type="text" class="input" id="searchInput" placeholder="🔍 नाम या कैप्शन खोजें..." oninput="renderExplore()" style="margin:0;">
+  </div>
+  <div class="grid-3" id="exploreGrid"></div>
+</div>
+
+<!-- PAGE 3: REELS -->
+<div id="page-reels" class="page">
+  <div id="reelsContainer"></div>
+</div>
+
+<!-- PAGE 4: PROFILE -->
+<div id="page-profile" class="page">
+  <div style="padding:18px 14px;border-bottom:1px solid #222;">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="avatar" id="profAvatar" style="width:68px;height:68px;font-size:26px;cursor:pointer;" onclick="triggerFileSelect('avatar')">उ</div>
+      <div style="flex:1;">
+        <div style="font-size:18px;font-weight:800;" id="profName">User</div>
+        <div style="font-size:12px;color:#999;margin-bottom:8px;" id="profHandle">@user</div>
+        <div style="display:flex;gap:18px;font-size:13px;">
+          <div><b id="statPosts">0</b> पोस्ट</div>
+          <div><b id="statLikes">0</b> लाइक्स</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#ccc;margin-top:10px;" id="profBio">सुंदरियाग्राम क्रिएटर ✨</div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="btn" style="flex:1;justify-content:center;" onclick="openProfileEdit()">✏️ प्रोफ़ाइल बदलें</button>
+      <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="triggerFileSelect('post')">+ नई पोस्ट डालें</button>
+      <button class="btn" onclick="openOwnerPin()" title="Owner Console">🔒</button>
+    </div>
+  </div>
+  <div class="grid-3" id="profileGrid"></div>
+</div>
+
+<!-- HIDDEN FILE INPUTS -->
+<input type="file" id="filePostInput" accept="video/*,image/*" style="display:none" onchange="handleFilePicked(event, 'post')">
+<input type="file" id="fileStoryInput" accept="video/*,image/*" style="display:none" onchange="handleFilePicked(event, 'story')">
+<input type="file" id="fileAvatarInput" accept="image/*" style="display:none" onchange="handleFilePicked(event, 'avatar')">
+
+<!-- MODAL: CREATE POST -->
+<div class="modal" id="createModal">
+  <div class="modal-card">
+    <h3 style="margin-bottom:10px;">✨ नई पोस्ट / रील अपलोड करें</h3>
+    <div id="previewBox" style="width:100%;max-height:260px;overflow:hidden;border-radius:12px;background:#000;margin-bottom:10px;display:flex;align-items:center;justify-content:center;"></div>
+    <input type="text" id="postCaptionInput" class="input" placeholder="यहाँ कैप्शन या हैशटैग लिखें (#trending)...">
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn" onclick="closeModal('createModal')">रद्द करें</button>
+      <button class="btn btn-primary" onclick="publishNewPost()">अभी पब्लिश करें 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: LIVE CAMERA -->
+<div class="modal" id="cameraModal">
+  <div class="modal-card">
+    <h3 style="margin-bottom:10px;">📸 लाइव कैमरा (फोटो व वीडियो)</h3>
+    <video id="liveVideo" autoplay playsinline muted style="width:100%;height:280px;background:#000;border-radius:12px;object-fit:cover;"></video>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="capturePhoto()">📷 फोटो खींचें</button>
+      <button class="btn" id="recBtn" onclick="toggleVideoRecord()">🔴 वीडियो रिकॉर्ड करें</button>
+      <button class="btn" onclick="closeCameraModal()">बंद करें</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: EDIT PROFILE -->
+<div class="modal" id="profileModal">
+  <div class="modal-card">
+    <h3 style="margin-bottom:10px;">👤 अपना प्रोफ़ाइल सेट करें</h3>
+    <label style="font-size:12px;color:#aaa;">आपका नाम</label>
+    <input type="text" id="editName" class="input" placeholder="जैसे: नरेश मरकाम">
+    <label style="font-size:12px;color:#aaa;">यूज़रनेम (@handle)</label>
+    <input type="text" id="editHandle" class="input" placeholder="जैसे: naresh_official">
+    <label style="font-size:12px;color:#aaa;">बायो (Bio)</label>
+    <input type="text" id="editBio" class="input" placeholder="अपने बारे में लिखें...">
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn" onclick="closeModal('profileModal')">बंद करें</button>
+      <button class="btn btn-primary" onclick="saveProfile()">सेव करें ✅</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: INSTALL APP ON PHONE -->
+<div class="modal" id="installModal">
+  <div class="modal-card">
+    <h3 style="margin-bottom:8px;">📲 फोन पर ऐप इंस्टॉल करें</h3>
+    <p style="font-size:13px;color:#ccc;line-height:1.5;margin-bottom:14px;">
+      इस ऐप को अपने फोन की होम-स्क्रीन पर असली ऐप की तरह लगाने के लिए:
+    </p>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;margin-bottom:10px;" onclick="installPWA()">
+      🚀 1-क्लिक में होम स्क्रीन पर जोड़ें (Install)
+    </button>
+    <button class="btn" style="width:100%;justify-content:center;padding:12px;margin-bottom:12px;" onclick="downloadStandaloneHTML()">
+      📥 ऑफलाइन ऐप फाइल डाउनलोड करें (.html)
+    </button>
+    <div style="background:#1c1c22;padding:10px;border-radius:10px;font-size:12px;color:#bbb;line-height:1.5;">
+      💡 <b>सीधा तरीका:</b> अपने Chrome ब्राउज़र में सबसे ऊपर दाईं तरफ <b>तीन बिंदु (⋮)</b> पर दबाएं और <b>"Add to Home screen" (होम स्क्रीन पर जोड़ें)</b> या <b>"Install app"</b> पर टच करें!
+    </div>
+    <button class="btn" style="width:100%;justify-content:center;margin-top:12px;" onclick="closeModal('installModal')">समझ गया</button>
+  </div>
+</div>
+
+<!-- MODAL: STORY VIEWER -->
+<div class="modal" id="storyModal" onclick="closeModal('storyModal')">
+  <div class="modal-card" style="padding:8px;background:#000;" onclick="event.stopPropagation()">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px;">
+      <b id="storyModalUser" style="font-size:13px;">Story</b>
+      <button class="btn" onclick="closeModal('storyModal')">✕</button>
+    </div>
+    <div id="storyModalContent" style="width:100%;max-height:75vh;display:flex;align-items:center;justify-content:center;"></div>
+  </div>
+</div>
+
+<!-- MODAL: OWNER SECRET AD SERVER (PIN: 1234) -->
+<div class="modal" id="ownerModal">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h3>🏢 मालिक विज्ञापन पैनल (Owner Ad Console)</h3>
+      <button class="btn" onclick="closeModal('ownerModal')">✕</button>
+    </div>
+    <p style="font-size:12px;color:#aaa;margin-bottom:12px;">यहाँ बनाया गया Sponsored विज्ञापन पब्लिक की फ़ीड में हर 2 पोस्ट के बाद दिखेगा (पब्लिक को यह पैनल कभी नहीं दिखता)।</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div style="background:#1c1c24;padding:10px;border-radius:10px;">
+        <div style="font-size:11px;color:#999;">कुल Ad Views</div>
+        <div style="font-size:20px;font-weight:800;color:#4ade80;" id="adViewsCount">0</div>
+      </div>
+      <div style="background:#1c1c24;padding:10px;border-radius:10px;">
+        <div style="font-size:11px;color:#999;">कुल Ad Clicks</div>
+        <div style="font-size:20px;font-weight:800;color:#60a5fa;" id="adClicksCount">0</div>
+      </div>
+    </div>
+    <label style="font-size:12px;">विज्ञापन कंपनी/ब्रांड का नाम</label>
+    <input type="text" id="adBrand" class="input" placeholder="जैसे: Amazon India / My Shop">
+    <label style="font-size:12px;">विज्ञापन फोटो/वीडियो लिंक या कैप्शन</label>
+    <input type="text" id="adText" class="input" placeholder="जैसे: 50% की भारी छूट! अभी खरीदें">
+    <label style="font-size:12px;">वेबसाइट लिंक (जब यूज़र क्लिक करे)</label>
+    <input type="text" id="adLink" class="input" placeholder="https://...">
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px;" onclick="saveSponsoredAd()">✅ विज्ञापन लाइव करें</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAVIGATION BAR -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="switchTab('home')"><span class="ico">🏠</span><span>होम</span></button>
+  <button class="nav-btn" id="nav-explore" onclick="switchTab('explore')"><span class="ico">🔍</span><span>खोजें</span></button>
+  <button class="nav-btn" onclick="triggerFileSelect('post')"><span class="ico" style="background:linear-gradient(45deg,#ff0055,#ff6600);padding:4px 12px;border-radius:12px;color:#fff;">➕</span><span>पोस्ट करें</span></button>
+  <button class="nav-btn" id="nav-reels" onclick="switchTab('reels')"><span class="ico">🎬</span><span>रील्स</span></button>
+  <button class="nav-btn" id="nav-profile" onclick="switchTab('profile')"><span class="ico">👤</span><span>प्रोफ़ाइल</span></button>
+</nav>
+
+<script>
+// --- SUNDARIYAGRAM REAL ENGINE (IndexedDB + Camera + Reels + Ad Server) ---
+let db;
+let profile = JSON.parse(localStorage.getItem('sg_profile') || '{"name":"आपका प्रोफ़ाइल","handle":"creator","bio":"सुंदरियाग्राम क्रिएटर ✨","avatar":""}');
+let adData = JSON.parse(localStorage.getItem('sg_ad') || '{"brand":"Sundariya Official","text":"अपना खुद का वीडियो और रील्स आज ही अपलोड करें!","link":"https://github.com","views":0,"clicks":0}');
+let posts = [];
+let stories = [];
+let pendingMedia = null;
+let logoTaps = 0;
+let camStream = null;
+let mediaRecorder = null;
+let recordedChunks = [];
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+
+// IndexedDB Setup for Real Videos & Photos
+const req = indexedDB.open('SundariyaGramDB_v3', 1);
+req.onupgradeneeded = (e) => {
+  const d = e.target.result;
+  if (!d.objectStoreNames.contains('posts')) d.createObjectStore('posts', { keyPath: 'id' });
+  if (!d.objectStoreNames.contains('stories')) d.createObjectStore('stories', { keyPath: 'id' });
+};
+req.onsuccess = (e) => {
+  db = e.target.result;
+  loadAllData();
+};
+
+function loadAllData() {
+  updateProfileUI();
+  const tx = db.transaction(['posts', 'stories'], 'readonly');
+  tx.objectStore('posts').getAll().onsuccess = (e) => {
+    posts = (e.target.result || []).sort((a,b) => b.id - a.id);
+    renderFeed();
+    renderExplore();
+    renderReels();
+    renderProfileGrid();
+  };
+  tx.objectStore('stories').getAll().onsuccess = (e) => {
+    stories = (e.target.result || []).sort((a,b) => b.id - a.id);
+    renderStories();
+  };
+}
+
+function updateProfileUI() {
+  document.getElementById('miniName').textContent = profile.name;
+  document.getElementById('profName').textContent = profile.name;
+  document.getElementById('profHandle').textContent = '@' + profile.handle;
+  document.getElementById('profBio').textContent = profile.bio;
+  const av = profile.avatar ? `<img src="${profile.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : profile.name.charAt(0);
+  document.getElementById('miniAvatar').innerHTML = av;
+  document.getElementById('profAvatar').innerHTML = av;
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  const nb = document.getElementById('nav-' + tab);
+  if (nb) nb.classList.add('active');
+  if (tab === 'reels') renderReels();
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function triggerFileSelect(type) {
+  if (type === 'post') document.getElementById('filePostInput').click();
+  if (type === 'story') document.getElementById('fileStoryInput').click();
+  if (type === 'avatar') document.getElementById('fileAvatarInput').click();
+}
+
+function handleFilePicked(e, mode) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const dataUrl = ev.target.result;
+    const isVideo = file.type.startsWith('video/');
+    if (mode === 'avatar') {
+      profile.avatar = dataUrl;
+      localStorage.setItem('sg_profile', JSON.stringify(profile));
+      updateProfileUI();
+    } else if (mode === 'story') {
+      const st = { id: Date.now(), user: profile.name, media: dataUrl, isVideo };
+      const tx = db.transaction('stories', 'readwrite');
+      tx.objectStore('stories').put(st);
+      tx.oncomplete = () => loadAllData();
+    } else {
+      pendingMedia = { url: dataUrl, isVideo };
+      showCreatePreview();
+    }
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+function showCreatePreview() {
+  const box = document.getElementById('previewBox');
+  box.innerHTML = pendingMedia.isVideo
+    ? `<video src="${pendingMedia.url}" controls autoplay loop style="max-height:250px;width:100%;"></video>`
+    : `<img src="${pendingMedia.url}" style="max-height:250px;width:100%;object-fit:contain;">`;
+  document.getElementById('postCaptionInput').value = '';
+  openModal('createModal');
+}
+
+function publishNewPost() {
+  if (!pendingMedia) return;
+  const cap = document.getElementById('postCaptionInput').value.trim() || 'सुंदरियाग्राम पोस्ट ✨';
+  const newPost = {
+    id: Date.now(),
+    user: profile.name,
+    handle: profile.handle,
+    avatar: profile.avatar,
+    media: pendingMedia.url,
+    isVideo: pendingMedia.isVideo,
+    caption: cap,
+    likes: 0,
+    liked: false,
+    comments: []
+  };
+  const tx = db.transaction('posts', 'readwrite');
+  tx.objectStore('posts').put(newPost);
+  tx.oncomplete = () => {
+    pendingMedia = null;
+    closeModal('createModal');
+    loadAllData();
+    switchTab('home');
+  };
+}
+
+function renderStories() {
+  const bar = document.getElementById('storiesBar');
+  let html = `
+    <div class="story-item" onclick="triggerFileSelect('story')">
+      <div class="story-ring">
+        ${profile.avatar ? `<img src="${profile.avatar}">` : `<div style="font-size:22px;">➕</div>`}
+        <div class="story-add">+</div>
+      </div>
+      <span class="story-name">आपकी स्टोरी</span>
+    </div>`;
+  stories.forEach(s => {
+    html += `
+      <div class="story-item" onclick="viewStory(${s.id})">
+        <div class="story-ring">
+          ${s.isVideo ? `<video src="${s.media}" muted></video>` : `<img src="${s.media}">`}
+        </div>
+        <span class="story-name">${s.user}</span>
+      </div>`;
+  });
+  bar.innerHTML = html;
+}
+
+function viewStory(id) {
+  const s = stories.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('storyModalUser').textContent = s.user;
+  document.getElementById('storyModalContent').innerHTML = s.isVideo
+    ? `<video src="${s.media}" controls autoplay style="width:100%;max-height:70vh;"></video>`
+    : `<img src="${s.media}" style="width:100%;max-height:70vh;object-fit:contain;">`;
+  openModal('storyModal');
+}
+
+function renderFeed() {
+  const box = document.getElementById('feedContainer');
+  document.getElementById('statPosts').textContent = posts.length;
+  document.getElementById('statLikes').textContent = posts.reduce((s,p) => s + (p.likes||0), 0);
+
+  if (posts.length === 0) {
+    box.innerHTML = `
+      <div style="text-align:center;padding:40px 20px;">
+        <div style="font-size:48px;margin-bottom:10px;">🎬</div>
+        <h3 style="margin-bottom:8px;">सुंदरियाग्राम में आपका स्वागत है!</h3>
+        <p style="font-size:13px;color:#999;margin-bottom:18px;">अपनी पहली असली वीडियो रील या फोटो अपलोड करने के लिए नीचे बटन दबाएं:</p>
+        <div style="display:flex;gap:10px;justify-content:center;">
+          <button class="btn btn-primary" style="padding:10px 18px;font-size:14px;" onclick="triggerFileSelect('post')">📁 गैलरी से वीडियो/फोटो चुनें</button>
+          <button class="btn" style="padding:10px 18px;font-size:14px;" onclick="openCameraModal()">📸 कैमरा खोलें</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  let html = '';
+  posts.forEach((p, idx) => {
+    html += `
+      <div class="post">
+        <div class="post-head">
+          <div class="post-user">
+            <div class="avatar">${p.avatar ? `<img src="${p.avatar}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">` : p.user.charAt(0)}</div>
             <div>
-                <!-- Brand Header (Tap 5 times rapidly for Hidden Owner Ad Server Console) -->
-                <div class="flex items-center justify-between px-3 mb-8 cursor-pointer group" onclick="handleLogoSecretTap()">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl story-ring flex items-center justify-center shadow-md group-active:scale-95 transition">
-                            <div class="bg-white dark:bg-zinc-950 w-full h-full rounded-[10px] flex items-center justify-center">
-                                <i data-lucide="instagram" class="w-5 h-5 text-pink-500"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <h1 class="font-logo text-3xl tracking-wide bg-gradient-to-r from-pink-500 via-purple-500 to-orange-400 bg-clip-text text-transparent leading-none">SundariyaGram</h1>
-                            <span class="text-[10px] font-medium tracking-wider text-zinc-400 block mt-0.5">सुंदरियाग्राम • Social</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Clean Public Navigation Links (Zero Money/Wallet Icons) -->
-                <nav class="space-y-1.5" id="desktop-nav">
-                    <button onclick="switchTab('home')" data-tab="home" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-semibold transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900 text-pink-500 bg-pink-500/10">
-                        <i data-lucide="home" class="w-6 h-6"></i>
-                        <span class="text-sm lg:text-base">Home • होम</span>
-                    </button>
-
-                    <button onclick="switchTab('explore')" data-tab="explore" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
-                        <i data-lucide="compass" class="w-6 h-6"></i>
-                        <span class="text-sm lg:text-base">Explore • खोजें</span>
-                    </button>
-
-                    <button onclick="switchTab('reels')" data-tab="reels" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
-                        <i data-lucide="clapperboard" class="w-6 h-6"></i>
-                        <div class="flex items-center justify-between flex-1">
-                            <span class="text-sm lg:text-base">Reels • रील्स</span>
-                            <span id="nav-reels-count" class="text-[10px] bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-2 py-0.5 rounded-full font-bold">0</span>
-                        </div>
-                    </button>
-
-                    <button onclick="openUploadModal('file')" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
-                        <i data-lucide="plus-square" class="w-6 h-6"></i>
-                        <span class="text-sm lg:text-base">Create • पोस्ट बनाएं</span>
-                    </button>
-
-                    <button onclick="openUploadModal('camera')" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
-                        <i data-lucide="camera" class="w-6 h-6 text-rose-500"></i>
-                        <span class="text-sm lg:text-base">Live Camera • कैमरा</span>
-                    </button>
-
-                    <button onclick="switchTab('profile')" data-tab="profile" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-xl font-medium transition-all hover:bg-zinc-100 dark:hover:bg-zinc-900">
-                        <div id="sidebar-profile-avatar" class="w-6 h-6 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold overflow-hidden ring-2 ring-pink-500/50">
-                            U
-                        </div>
-                        <span class="text-sm lg:text-base truncate" id="sidebar-profile-name">Profile • प्रोफ़ाइल</span>
-                    </button>
-                </nav>
+              <div style="font-size:13px;font-weight:700;">${p.user}</div>
+              <div style="font-size:11px;color:#888;">@${p.handle}</div>
             </div>
+          </div>
+          <button class="btn" onclick="deletePost(${p.id})" title="Delete">🗑️</button>
+        </div>
+        <div class="post-media" ondblclick="toggleLike(${p.id})">
+          ${p.isVideo
+            ? `<video src="${p.media}" controls playsinline loop style="width:100%;max-height:500px;"></video>`
+            : `<img src="${p.media}">`}
+        </div>
+        <div class="post-actions">
+          <div class="action-left">
+            <button class="action-btn" onclick="toggleLike(${p.id})">${p.liked ? '❤️' : '🤍'} <span>${p.likes}</span></button>
+            <button class="action-btn" onclick="document.getElementById('ci-${p.id}').focus()">💬 <span>${(p.comments||[]).length}</span></button>
+            <button class="action-btn" onclick="sharePost('${p.caption}')">📤</button>
+          </div>
+        </div>
+        <div class="post-caption"><b>${p.user}</b> ${p.caption}</div>
+        <div class="comments-box">
+          ${(p.comments||[]).map(c => `<div><b>${c.u}:</b>${c.t}</div>`).join('')}
+        </div>
+        <div class="comment-input-row">
+          <input type="text" id="ci-${p.id}" placeholder="कमेंट लिखें...">
+          <button class="btn btn-primary" onclick="addComment(${p.id})">भेजें</button>
+        </div>
+      </div>`;
 
-            <!-- Bottom Theme & Cloud Sync Indicator -->
-            <div class="space-y-3 pt-4 border-t border-zinc-200 dark:border-insta-border">
-                <div class="flex items-center justify-between px-2">
-                    <button onclick="toggleTheme()" class="flex items-center gap-2 text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white py-2 px-3 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition">
-                        <i data-lucide="sun-moon" class="w-4 h-4"></i>
-                        <span>Dark / Light</span>
-                    </button>
-                    <span id="storage-status-badge" class="text-[10px] font-medium text-zinc-400 flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Synced
-                    </span>
-                </div>
+    // Inject Corporate Sponsored Ad slot after every 2 posts
+    if ((idx + 1) % 2 === 0 && adData.brand) {
+      adData.views = (adData.views || 0) + 1;
+      localStorage.setItem('sg_ad', JSON.stringify(adData));
+      html += `
+        <div class="post" style="border:1px solid #2e2e38;margin:10px;border-radius:12px;padding-bottom:10px;">
+          <div class="post-head">
+            <div class="post-user">
+              <div class="avatar" style="background:#eab308;color:#000;">AD</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;">${adData.brand}</div>
+                <span class="badge-ad">Sponsored • प्रायोजित</span>
+              </div>
             </div>
-        </aside>
+          </div>
+          <div style="padding:14px;background:#121218;font-size:14px;color:#eee;">${adData.text}</div>
+          <div style="padding:10px 14px 0;">
+            <button class="btn btn-primary" style="width:100%;justify-content:center;padding:9px;" onclick="clickSponsoredAd()">🔗 अभी देखें (Learn More)</button>
+          </div>
+        </div>`;
+    }
+  });
+  box.innerHTML = html;
+}
 
-        <!-- MOBILE TOP HEADER -->
-        <header class="md:hidden sticky top-0 z-40 bg-white/95 dark:bg-insta-dark/95 backdrop-blur-md border-b border-zinc-200 dark:border-insta-border px-4 py-2.5 flex items-center justify-between select-none">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="handleLogoSecretTap()">
-                <div class="w-8 h-8 rounded-lg story-ring flex items-center justify-center">
-                    <div class="bg-white dark:bg-zinc-950 w-full h-full rounded-[6px] flex items-center justify-center">
-                        <i data-lucide="instagram" class="w-4 h-4 text-pink-500"></i>
-                    </div>
-                </div>
-                <span class="font-logo text-2xl bg-gradient-to-r from-pink-500 via-purple-500 to-orange-400 bg-clip-text text-transparent">SundariyaGram</span>
-            </div>
+function toggleLike(id) {
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  p.liked = !p.liked;
+  p.likes += p.liked ? 1 : -1;
+  const tx = db.transaction('posts', 'readwrite');
+  tx.objectStore('posts').put(p);
+  tx.oncomplete = () => loadAllData();
+}
 
-            <div class="flex items-center gap-2">
-                <button onclick="openUploadModal('camera')" class="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 text-rose-500" title="Live Camera">
-                    <i data-lucide="camera" class="w-5 h-5"></i>
-                </button>
-                <button onclick="switchTab('explore')" class="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900">
-                    <i data-lucide="search" class="w-5 h-5"></i>
-                </button>
-                <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900">
-                    <i data-lucide="sun-moon" class="w-5 h-5"></i>
-                </button>
-            </div>
-        </header>
+function addComment(id) {
+  const inp = document.getElementById('ci-' + id);
+  const txt = inp.value.trim();
+  if (!txt) return;
+  const p = posts.find(x => x.id === id);
+  p.comments = p.comments || [];
+  p.comments.push({ u: profile.name, t: txt });
+  const tx = db.transaction('posts', 'readwrite');
+  tx.objectStore('posts').put(p);
+  tx.oncomplete = () => loadAllData();
+}
 
-        <!-- MAIN CONTENT AREA -->
-        <main class="flex-1 md:ml-64 lg:ml-72 pb-20 md:pb-12 min-h-screen">
+function deletePost(id) {
+  if (!confirm('क्या आप इस पोस्ट को हटाना चाहते हैं?')) return;
+  const tx = db.transaction('posts', 'readwrite');
+  tx.objectStore('posts').delete(id);
+  tx.oncomplete = () => loadAllData();
+}
 
-            <!-- ==========================================
-                 TAB 1: AUTHENTIC HOME FEED
-            =========================================== -->
-            <section id="tab-home" class="tab-view max-w-5xl mx-auto pt-3 md:pt-6 px-0 sm:px-4 flex flex-col lg:flex-row gap-8 justify-center">
-                
-                <!-- Center Feed Column -->
-                <div class="w-full max-w-[470px] mx-auto space-y-4">
-                    
-                    <!-- Stories Tray -->
-                    <div id="stories-wrapper" class="bg-white dark:bg-insta-card border-b sm:border border-zinc-200 dark:border-insta-border sm:rounded-2xl p-3.5 overflow-x-auto no-scrollbar">
-                        <div class="flex items-center gap-4" id="stories-container">
-                            <!-- Populated dynamically -->
-                        </div>
-                        <input type="file" id="hidden-story-input" accept="image/*,video/*" class="hidden" onchange="handleRealStoryUpload(event)">
-                    </div>
+function sharePost(cap) {
+  if (navigator.share) navigator.share({ title: 'SundariyaGram', text: cap, url: location.href });
+  else alert('लिंक कॉपी हो गया: ' + location.href);
+}
 
-                    <!-- Quick Create Post Bar -->
-                    <div class="px-3 sm:px-0">
-                        <div class="bg-white dark:bg-insta-card border border-zinc-200 dark:border-insta-border rounded-2xl p-3 flex items-center justify-between gap-2">
-                            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('profile')">
-                                <div id="feed-top-avatar" class="w-9 h-9 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs overflow-hidden shrink-0">
-                                    U
-                                </div>
-                                <div>
-                                    <span id="feed-top-name" class="font-semibold text-xs sm:text-sm block leading-tight">अपना प्रोफ़ाइल सेट करें</span>
-                                    <span class="text-[11px] text-zinc-400">यहाँ से असली वीडियो और फोटो शेयर करें</span>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <button onclick="openUploadModal('file')" class="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-xs font-semibold flex items-center gap-1.5 transition">
-                                    <i data-lucide="image-plus" class="w-4 h-4 text-pink-500"></i>
-                                    <span>गैलरी</span>
-                                </button>
-                                <button onclick="openUploadModal('camera')" class="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-xs font-semibold flex items-center gap-1.5 transition">
-                                    <i data-lucide="video" class="w-4 h-4 text-purple-500"></i>
-                                    <span>कैमरा</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+function renderExplore() {
+  const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  const list = posts.filter(p => p.caption.toLowerCase().includes(q) || p.user.toLowerCase().includes(q));
+  const grid = document.getElementById('exploreGrid');
+  if (list.length === 0) {
+    grid.innerHTML = `<div style="grid-column:span 3;text-align:center;padding:30px;color:#777;">कोई पोस्ट नहीं मिली। पहले '+' दबाकर वीडियो/फोटो डालें।</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(p => `
+    <div class="grid-3-item" onclick="switchTab('home')">
+      ${p.isVideo ? `<video src="${p.media}" muted></video>` : `<img src="${p.media}">`}
+    </div>`).join('');
+}
 
-                    <!-- Main Feed Posts + Native Sponsored Ad Slots -->
-                    <div id="feed-posts-container" class="space-y-5 pb-6">
-                        <!-- Populated dynamically -->
-                    </div>
-                </div>
+function renderReels() {
+  const box = document.getElementById('reelsContainer');
+  const vids = posts.filter(p => p.isVideo);
+  if (vids.length === 0) {
+    box.innerHTML = `
+      <div style="text-align:center;padding:60px 20px;">
+        <div style="font-size:45px;">🎞️</div>
+        <h3 style="margin:10px 0;">अभी कोई वीडियो रील नहीं है</h3>
+        <p style="font-size:13px;color:#888;margin-bottom:16px;">अपने फोन से असली वीडियो अपलोड करें, वह यहाँ फुल-स्क्रीन रील्स में चलेगा!</p>
+        <button class="btn btn-primary" onclick="triggerFileSelect('post')">+ अभी वीडियो रील डालें</button>
+      </div>`;
+    return;
+  }
+  box.innerHTML = vids.map(v => `
+    <div class="reel-card">
+      <video src="${v.media}" controls autoplay loop playsinline></video>
+      <div class="reel-overlay">
+        <div style="font-weight:700;font-size:14px;">@${v.handle}</div>
+        <div style="font-size:13px;margin-top:4px;">${v.caption}</div>
+      </div>
+      <div class="reel-side">
+        <button class="action-btn" style="flex-direction:column;" onclick="toggleLike(${v.id})">${v.liked ? '❤️' : '🤍'}<span>${v.likes}</span></button>
+        <button class="action-btn" onclick="sharePost('${v.caption}')">📤</button>
+      </div>
+    </div>`).join('');
+}
 
-                <!-- Right Desktop Sidebar (Authentic User Card & Quick Links) -->
-                <div class="hidden lg:block w-80 shrink-0 pt-2 space-y-6">
-                    <!-- Current User Profile Card -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('profile')">
-                            <div id="right-card-avatar" class="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold text-base overflow-hidden">
-                                U
-                            </div>
-                            <div>
-                                <div id="right-card-username" class="font-bold text-sm">your_handle</div>
-                                <div id="right-card-fullname" class="text-xs text-zinc-500 dark:text-zinc-400">Your Name</div>
-                            </div>
-                        </div>
-                        <button onclick="openProfileSetupModal()" class="text-xs font-bold text-sky-500 hover:text-sky-400">Edit</button>
-                    </div>
+function renderProfileGrid() {
+  const grid = document.getElementById('profileGrid');
+  grid.innerHTML = posts.map(p => `
+    <div class="grid-3-item">
+      ${p.isVideo ? `<video src="${p.media}" muted></video>` : `<img src="${p.media}">`}
+    </div>`).join('');
+}
 
-                    <!-- Platform Features Box -->
-                    <div class="p-4 rounded-2xl bg-zinc-50 dark:bg-insta-card border border-zinc-200 dark:border-insta-border space-y-3">
-                        <div class="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Create & Share</div>
-                        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                            अपने फ़ोन या कंप्यूटर से असली HD वीडियो (.mp4, .webm) और फ़ोटो अपलोड करें या सीधे लाइव कैमरे से रील्स रिकॉर्ड करें।
-                        </p>
-                        <div class="grid grid-cols-2 gap-2 pt-1">
-                            <button onclick="openUploadModal('file')" class="py-2 px-3 rounded-xl bg-zinc-200/70 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
-                                <i data-lucide="upload" class="w-3.5 h-3.5 text-pink-500"></i> Upload File
-                            </button>
-                            <button onclick="openUploadModal('camera')" class="py-2 px-3 rounded-xl bg-zinc-200/70 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
-                                <i data-lucide="camera" class="w-3.5 h-3.5 text-purple-500"></i> Record Live
-                            </button>
-                        </div>
-                    </div>
+// Live Camera Functions
+async function openCameraModal() {
+  openModal('cameraModal');
+  try {
+    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: true });
+    document.getElementById('liveVideo').srcObject = camStream;
+  } catch (err) {
+    alert('कैमरा चालू करने के लिए ब्राउज़र में Allow (अनुमति) दें या गैलरी बटन का उपयोग करें।');
+  }
+}
+function closeCameraModal() {
+  if (camStream) camStream.getTracks().forEach(t => t.stop());
+  closeModal('cameraModal');
+}
+function capturePhoto() {
+  const v = document.getElementById('liveVideo');
+  if (!v.videoWidth) return;
+  const c = document.createElement('canvas');
+  c.width = v.videoWidth; c.height = v.videoHeight;
+  c.getContext('2d').drawImage(v, 0, 0);
+  pendingMedia = { url: c.toDataURL('image/jpeg', 0.85), isVideo: false };
+  closeCameraModal();
+  showCreatePreview();
+}
+function toggleVideoRecord() {
+  if (!camStream) return;
+  const btn = document.getElementById('recBtn');
+  if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(camStream);
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(recordedChunks, { type: 'video/webm' });
+      const reader = new FileReader();
+      reader.onload = ev => {
+        pendingMedia = { url: ev.target.result, isVideo: true };
+        closeCameraModal();
+        showCreatePreview();
+      };
+      reader.readAsDataURL(blob);
+    };
+    mediaRecorder.start();
+    btn.textContent = '⏹️ रिकॉर्डिंग रोकें';
+  } else {
+    mediaRecorder.stop();
+    btn.textContent = '🔴 वीडियो रिकॉर्ड करें';
+  }
+}
 
-                    <!-- Footer Legal Info -->
-                    <div class="text-[11px] text-zinc-400 space-y-2 leading-relaxed">
-                        <p>About • Help • Press • API • Jobs • Privacy • Terms • Locations</p>
-                        <p>© 2026 SUNDARIYAGRAM SOCIAL</p>
-                    </div>
-                </div>
-            </section>
+// Profile Edit
+function openProfileEdit() {
+  document.getElementById('editName').value = profile.name;
+  document.getElementById('editHandle').value = profile.handle;
+  document.getElementById('editBio').value = profile.bio;
+  openModal('profileModal');
+}
+function saveProfile() {
+  profile.name = document.getElementById('editName').value.trim() || 'User';
+  profile.handle = document.getElementById('editHandle').value.trim().replace('@','') || 'user';
+  profile.bio = document.getElementById('editBio').value.trim();
+  localStorage.setItem('sg_profile', JSON.stringify(profile));
+  updateProfileUI();
+  closeModal('profileModal');
+}
 
-            <!-- ==========================================
-                 TAB 2: EXPLORE & SEARCH TAB
-            =========================================== -->
-            <section id="tab-explore" class="tab-view hidden max-w-4xl mx-auto pt-4 px-3 sm:px-4 space-y-5">
-                <!-- Search Input Bar -->
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                    <div class="relative flex-1">
-                        <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
-                        <input 
-                            type="text" 
-                            id="explore-search-input" 
-                            oninput="renderExploreGrid()" 
-                            placeholder="कैप्शन, लोकेशन या हैशटैग (#) खोजें..." 
-                            class="w-full pl-11 pr-4 py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-insta-border text-sm focus:outline-none focus:border-pink-500"
-                        >
-                    </div>
-                    <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-                        <button onclick="setExploreFilter('all')" id="exp-filter-all" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 shrink-0">All Posts</button>
-                        <button onclick="setExploreFilter('video')" id="exp-filter-video" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 shrink-0">Videos / Reels</button>
-                        <button onclick="setExploreFilter('image')" id="exp-filter-image" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 shrink-0">Photos</button>
-                    </div>
-                </div>
+// Install / Download App
+function installPWA() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+  } else {
+    alert('अपने Chrome ब्राउज़र के ऊपर दाईं तरफ तीन बिंदु (⋮) पर दबाएं और "Add to Home screen" या "Install App" चुनें!');
+  }
+}
+function downloadStandaloneHTML() {
+  const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'SundariyaGram_App.html';
+  a.click();
+}
 
-                <!-- Explore Media Grid -->
-                <div id="explore-grid-container" class="grid grid-cols-3 gap-1 sm:gap-3">
-                    <!-- Populated dynamically -->
-                </div>
-            </section>
-
-            <!-- ==========================================
-                 TAB 3: VERTICAL REELS PLAYER
-            =========================================== -->
-            <section id="tab-reels" class="tab-view hidden h-[calc(100vh-115px)] md:h-[calc(100vh-32px)] flex items-center justify-center px-0 sm:px-4 pt-0 md:pt-4">
-                <div class="relative w-full max-w-[410px] h-full bg-black sm:rounded-3xl overflow-hidden shadow-2xl border border-zinc-800 flex flex-col">
-                    <!-- Top Overlay inside Reels -->
-                    <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
-                        <div class="flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full">
-                            <i data-lucide="clapperboard" class="w-4 h-4 text-white"></i>
-                            <span class="text-white font-bold text-xs sm:text-sm">Reels</span>
-                        </div>
-                        <button onclick="openUploadModal('camera')" class="pointer-events-auto bg-white/15 hover:bg-white/25 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i data-lucide="camera" class="w-3
+// Hidden Owner Console (5 taps on logo or lock icon)
+function handleLogoTap() {
+  logoTaps++;
+  setTimeout(() => { logoTaps = 0; }, 1800);
+  if (logoTaps >= 5) { logoTaps = 0; openOwnerPin(); }
+}
+function openOwnerPin() {
+  const pin = prompt('मालिक पिन (Owner PIN) दर्ज करें:');
+  if (pin === '1234') {
+    document.getElementById('adViewsCount').textContent = adData.views || 0;
+    document.getElementById('adClicksCount').textContent = adData.clicks || 0;
+    document.getElementById('adBrand').value = adData.brand || '';
+    document.getElementById('adText').value = adData.text || '';
+    document.getElementById('adLink').value = adData.link || '';
+    openModal('ownerModal');
+  } else if (pin !== null) {
+    alert('गलत पिन!');
+  }
+}
+function saveSponsoredAd() {
+  adData.brand = document.getElementById('adBrand').value.trim();
+  adData.text = document.getElementById('adText').value.trim();
+  adData.link = document.getElementById('adLink').value.trim() || 'https://';
+  localStorage.setItem('sg_ad', JSON.stringify(adData));
+  closeModal('ownerModal');
+  renderFeed();
+  alert('विज्ञापन सेव हो गया!');
+}
+function clickSponsoredAd() {
+  adData.clicks = (adData.clicks || 0) + 1;
+  localStorage.setItem('sg_ad', JSON.stringify(adData));
+  window.open(adData.link || 'https://', '_blank');
+}
+</script>
+</body>
+</html>
